@@ -1,0 +1,104 @@
+{
+  "provider": "offline",
+  "model": "offline",
+  "n": 8,
+  "priority_accuracy": 0.25,
+  "tag_precision": 0.25,
+  "tag_recall": 0.2,
+  "tag_f1": 0.222,
+  "exact_match": 0.0,
+  "mean_latency_s": 0.0,
+  "evaluated_at": "2026-11-07T19:47:58+00:00",
+  "rows": [
+    {
+      "id": 1,
+      "gold_tags": [
+        "billing"
+      ],
+      "pred_tags": [
+        "billing"
+      ],
+      "gold_priority": "High",
+      "pred_priority": "Low"
+    },
+    {
+      "id": 2,
+      "gold_tags": [
+        "technical"
+      ],
+      "pred_tags": [
+        "billing"
+      ],
+      "gold_priority": "Urgent",
+      "pred_priority": "Low"
+    },
+    {
+      "id": 3,
+      "gold_tags": [
+        "feature_request"
+      ],
+      "pred_tags": [
+        "billing"
+      ],
+      "gold_priority": "Low",
+      "pred_priority": "Low"
+    },
+    {
+      "id": 4,
+      "gold_tags": [
+        "account"
+      ],
+      "pred_tags": [
+        "billing"
+      ],
+      "gold_priority": "High",
+      "pred_priority": "Low"
+    },
+    {
+      "id": 5,
+      "gold_tags": [
+        "security"
+      ],
+      "pred_tags": [
+        "billing"
+      ],
+      "gold_priority": "Urgent",
+      "pred_priority": "Low"
+    },
+    {
+      "id": 6,
+      "gold_tags": [
+        "account",
+        "billing"
+      ],
+      "pred_tags": [
+        "billing"
+      ],
+      "gold_priority": "Low",
+      "pred_priority": "Low"
+    },
+    {
+      "id": 7,
+      "gold_tags": [
+        "technical"
+      ],
+      "pred_tags": [
+        "billing"
+      ],
+      "gold_priority": "Medium",
+      "pred_priority": "Low"
+    },
+    {
+      "id": 8,
+      "gold_tags": [
+        "feature_request",
+        "security"
+      ],
+      "pred_tags": [
+        "billing"
+      ],
+      "gold_priority": "Medium",
+      "pred_priority": "Low"
+    }
+  ]
+}

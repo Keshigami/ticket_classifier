@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ticket Classifier</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/static/ui.css">
+<style>
+  .samples{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+  .samples button{text-align:left;white-space:normal;font-weight:500;font-size:.86rem;line-height:1.35;padding:10px 12px}
+  .samples button .meta{display:block;margin-bottom:3px}
+  .prio{font-family:var(--display);font-size:1.6rem;font-weight:700;line-height:1}
+  .prio.Low{color:var(--ok)} .prio.Medium{color:var(--fg)} .prio.High{color:var(--warn)} .prio.Urgent{color:var(--danger)}
+  .chips{display:flex;gap:6px;flex-wrap:wrap}
+  #result{min-height:120px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>Support Ticket Classifier</h1>
+    <span class="sub">Paste a ticket, get tags, priority and a suggested next action as JSON.</span>
+    <span class="badge" id="badge">…</span>
+    <span class="badge">:8112</span>
+  </header>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Ticket</h2>
+      <label for="input">Ticket text</label>
+      <textarea id="input" placeholder="e.g. I was charged twice this month, please refund one invoice."></textarea>
+      <div class="row" style="margin-top:10px">
+        <button id="run">Classify</button>
+        <button class="ghost" id="clear">Clear</button>
+        <span class="meta" id="status"></span>
+      </div>
+      <h3 style="margin-top:18px">Sample tickets <span class="meta">one click, runs immediately</span></h3>
+      <div class="samples" id="samples"></div>
+    </section>
+
+    <section class="card">
+      <h2>Result</h2>
+      <div id="result" aria-live="polite">
+        <div class="empty">Pick a sample ticket or paste your own, then press Classify.</div>
+      </div>
+    </section>
+  </div>
+</div>
+<script>
+  const META = __META__;
+  const $ = id => document.getElementById(id);
+  const badge = $('badge');
+  badge.textContent = META.provider === 'offline' ? 'offline · deterministic' : `${META.provider} · ${META.model}`;
+  badge.classList.toggle('on', META.provider !== 'offline');
+  if (META.provider === 'offline') badge.title = 'No API key set: answers are deterministic placeholders. Set ANTHROPIC_API_KEY (or OPENAI_API_KEY / GOOGLE_API_KEY) for real classification.';
+
+  fetch('/examples').then(r => r.json()).then(list => {
+    const box = $('samples');
+    list.forEach(ex => {
+      const b = document.createElement('button'); b.className = 'ghost'; b.id = 'sample-' + ex.id;
+      b.innerHTML = `<span class="meta">#${ex.id} · labelled ${ex.priority} · ${ex.tags.join(', ')}</span>` +
+        ex.ticket_text.slice(0, 90).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])) + (ex.ticket_text.length > 90 ? '…' : '');
+      b.onclick = () => { $('input').value = ex.ticket_text; classify(); };
+      box.appendChild(b);
+    });
+  });
+
+  async function classify() {
+    const text = $('input').value.trim();
+    if (!text) { $('status').textContent = 'Enter a ticket first.'; return; }
+    $('run').disabled = true;
+    $('status').innerHTML = '<span class="spinner"></span> classifying';
+    const t0 = performance.now();
+    try {
+      const r = await fetch('/classify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ticket_text: text }) });
+      const data = await r.json();
+      if (!r.ok) throw new Error(data.detail || r.statusText);
+      const ms = Math.round(performance.now() - t0);
+      $('result').innerHTML = `
+        <div class="grid" style="--gap:12px">
+          <div class="stat"><b class="prio ${data.priority}">${data.priority}</b><span>priority</span></div>
+          <div class="stat"><b>${ms}<small style="font-size:.9rem"> ms</small></b><span>latency</span></div>
+        </div>
+        <p style="margin-top:14px"><strong>Tags</strong></p>
+        <div class="chips">${data.tags.map(t => `<span class="pill ok">${t}</span>`).join('')}</div>
+        <p style="margin-top:14px"><strong>Suggested action</strong><br>${data.suggested_action.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}</p>
+        <p class="meta">${data.provider} · ${data.model}${data.provider === 'offline' ? ' · offline placeholder, not a real classification' : ''}</p>
+        <pre id="json">${JSON.stringify(data, null, 2)}</pre>`;
+      $('status').textContent = `${ms} ms`;
+    } catch (e) {
+      $('result').innerHTML = `<div class="empty" style="border-color:var(--danger);color:var(--danger)">Error: ${e.message}. Check the server log; if a provider key is set, verify it and retry.</div>`;
+      $('status').textContent = '';
+    } finally { $('run').disabled = false; }
+  }
+  $('run').onclick = classify;
+  $('clear').onclick = () => { $('input').value = ''; $('result').innerHTML = '<div class="empty">Pick a sample ticket or paste your own, then press Classify.</div>'; $('status').textContent = ''; };
+</script>
+</body>
+</html>

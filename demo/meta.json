@@ -1,0 +1,54 @@
+{
+ "folder": "portfolio/ticket_classifier",
+ "slug": "portfolio__ticket_classifier",
+ "port": 8112,
+ "title": "Support Ticket Classifier",
+ "one_liner": "A FastAPI endpoint that turns a raw support ticket into validated JSON (tags, priority, next action) through a provider-agnostic LLM door, with an eval script that scores it.",
+ "duration_s": 60.3,
+ "highlight_s": 11.2,
+ "steps": [
+  {
+   "n": 1,
+   "text": "Eight labelled sample tickets; one click classifies",
+   "ok": true,
+   "t": 2.5
+  },
+  {
+   "n": 2,
+   "text": "A billing ticket: priority, tags and a suggested action, as JSON",
+   "ok": true,
+   "t": 6.3
+  },
+  {
+   "n": 3,
+   "text": "Technical and urgent: a blank dashboard after login",
+   "ok": true,
+   "t": 16.7
+  },
+  {
+   "n": 4,
+   "text": "A feature request: low priority",
+   "ok": true,
+   "t": 26.7
+  },
+  {
+   "n": 5,
+   "text": "The raw JSON the inbox would route on",
+   "ok": true,
+   "t": 40.7
+  },
+  {
+   "n": 6,
+   "text": "The badge says which provider and model answered",
+   "ok": true,
+   "t": 49.9
+  },
+  {
+   "n": 7,
+   "text": "Or paste your own ticket and press Classify",
+   "ok": true,
+   "t": 55.0
+  }
+ ],
+ "skipped": []
+}

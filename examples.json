@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "ticket_text": "I was charged twice for my Pro subscription this month. Invoice #4821 and #4822 are both on my card. Please refund one.",
+    "tags": ["billing"],
+    "priority": "High"
+  },
+  {
+    "id": 2,
+    "ticket_text": "The dashboard shows a blank page after login since this morning. Console says 500 on /api/widgets. Our whole team is blocked.",
+    "tags": ["technical"],
+    "priority": "Urgent"
+  },
+  {
+    "id": 3,
+    "ticket_text": "It would be great if we could export reports as CSV in addition to PDF. Not urgent, just a wish from our finance team.",
+    "tags": ["feature_request"],
+    "priority": "Low"
+  },
+  {
+    "id": 4,
+    "ticket_text": "I can't log into my account and I need to reset my password immediately. It says my email is not recognized.",
+    "tags": ["account"],
+    "priority": "High"
+  },
+  {
+    "id": 5,
+    "ticket_text": "We received a phishing email that looks like it came from your domain and asks for our API key. Attaching the headers.",
+    "tags": ["security"],
+    "priority": "Urgent"
+  },
+  {
+    "id": 6,
+    "ticket_text": "How do I change the company name on our invoices? We rebranded last month.",
+    "tags": ["billing", "account"],
+    "priority": "Low"
+  },
+  {
+    "id": 7,
+    "ticket_text": "The mobile app crashes when I open the notifications tab on Android 14. Happens every time, but the web app works fine.",
+    "tags": ["technical"],
+    "priority": "Medium"
+  },
+  {
+    "id": 8,
+    "ticket_text": "Can you add two-factor authentication for all seats on our plan? Our security audit requires it by next quarter.",
+    "tags": ["feature_request", "security"],
+    "priority": "Medium"
+  }
+]
